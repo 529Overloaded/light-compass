@@ -78,14 +78,19 @@ const Index = () => {
 
     const now = currentTime.getTime();
     const times = [
-      { time: goldenHours.morningStart, label: "dawn" },
-      { time: goldenHours.morningEnd, label: "morning_end" },
-      { time: goldenHours.eveningStart, label: "evening_start" },
-      { time: goldenHours.eveningEnd, label: "dusk" },
+      { time: goldenHours.morningStart, label: "morning" },
+      { time: goldenHours.eveningStart, label: "evening" },
     ];
 
+    // Find next golden hour today
     const upcoming = times.find(t => t.time.getTime() > now);
-    return upcoming || times[0];
+    if (upcoming) return upcoming;
+
+    // If no more today, get tomorrow's morning golden hour
+    const tomorrow = new Date(currentTime);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowTimes = SunCalc.getTimes(tomorrow, location!.lat, location!.lon);
+    return { time: tomorrowTimes.dawn, label: "morning" };
   };
 
   const getCountdown = () => {
@@ -131,7 +136,7 @@ const Index = () => {
         {location && goldenHours && (
           <>
             <section className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 text-center">
                 <div className="space-y-1">
                   <h2 className="text-xs text-muted-foreground uppercase tracking-wider">morning</h2>
                   <div className="text-base sm:text-lg">
@@ -162,7 +167,7 @@ const Index = () => {
               {!isInGoldenHour() && countdown && (
                 <div className="text-center space-y-2">
                   <h2 className="text-xs text-muted-foreground uppercase tracking-wider">
-                    next: {countdown.label.replace('_', ' ')}
+                    {countdown.label}
                   </h2>
                   <div className="text-3xl sm:text-4xl font-light tracking-tight tabular-nums">
                     {String(countdown.hours).padStart(2, '0')}:
