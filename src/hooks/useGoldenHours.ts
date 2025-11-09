@@ -31,10 +31,10 @@ export const useGoldenHours = (location: Location | null): UseGoldenHoursResult 
 
     const times = SunCalc.getTimes(currentTime, location.lat, location.lon);
     setGoldenHours({
-      morningStart: times.sunrise,
+      morningStart: times.sunriseEnd,
       morningEnd: times.goldenHourEnd,
       eveningStart: times.goldenHour,
-      eveningEnd: times.sunset,
+      eveningEnd: times.sunsetStart,
     });
   }, [location, currentTime]);
 
@@ -56,7 +56,7 @@ export const useGoldenHours = (location: Location | null): UseGoldenHoursResult 
     const tomorrow = new Date(currentTime);
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowTimes = SunCalc.getTimes(tomorrow, location.lat, location.lon);
-    return { time: tomorrowTimes.sunrise, label: "morning" };
+    return { time: tomorrowTimes.sunriseEnd, label: "morning" };
   }, [goldenHours, location, currentTime]);
 
   // Calculate countdown to next golden hour
