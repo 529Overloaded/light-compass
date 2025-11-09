@@ -33,7 +33,7 @@ const Index = () => {
 
         {locationError && (
           <div className="text-center text-sm text-muted-foreground border border-border rounded p-3">
-            location_required
+            Please enable location access in your browser to view golden hour times
           </div>
         )}
 
