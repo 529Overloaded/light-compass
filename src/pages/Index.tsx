@@ -19,12 +19,6 @@ const Index = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Register service worker
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
-    }
-  }, []);
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
